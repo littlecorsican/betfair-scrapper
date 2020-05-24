@@ -1,0 +1,11 @@
+https://www.betfair.com/www/sports/navigation/facet/v1/search?_ak=nzIFcwyWhrlwYMrh&alt=json
+
+
+{"filter":{"marketBettingTypes":["ASIAN_HANDICAP_SINGLE_LINE","ASIAN_HANDICAP_DOUBLE_LINE","ODDS","LINE","LINE","LINE","LINE","LINE"],"exchangeIds":[1],"productTypes":["EXCHANGE"],"contentGroup":{"language":"en","regionCode":"ASIA"},"selectBy":"RANK","maxResults":0},"textQuery":null,"facets":[{"type":"EVENT_TYPE","maxValues":7,"skipValues":0,"applyNextTo":0}],"currencyCode":"USD","locale":"en"}
+
+
+
+
+
+
+{"facets":[{"values":[{"key":{"eventTypeId":1},"cardinality":967},{"key":{"eventTypeId":4},"cardinality":101},{"key":{"eventTypeId":2378961},"cardinality":96},{"key":{"eventTypeId":5},"cardinality":17},{"key":{"eventTypeId":7524},"cardinality":31},{"key":{"eventTypeId":6},"cardinality":3},{"key":{"eventTypeId":7522},"cardinality":11}],"totalResults":27,"type":"EVENT_TYPE"}],"results":[],"attachments":{"eventTypes":{"1":{"name":"Soccer","key":"EVENT_TYPE:1","eventTypeId":1},"7522":{"name":"Basketball","key":"EVENT_TYPE:7522","eventTypeId":7522},"4":{"name":"Cricket","key":"EVENT_TYPE:4","eventTypeId":4},"7524":{"name":"Ice Hockey","key":"EVENT_TYPE:7524","eventTypeId":7524},"2378961":{"name":"Politics","key":"EVENT_TYPE:2378961","eventTypeId":2378961},"5":{"name":"Rugby Union","key":"EVENT_TYPE:5","eventTypeId":5},"6":{"name":"Boxing","key":"EVENT_TYPE:6","eventTypeId":6}}}}

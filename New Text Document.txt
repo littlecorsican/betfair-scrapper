@@ -1,0 +1,10 @@
+
+https://www.betfair.com/www/sports/navigation/facet/v1/search?_ak=nzIFcwyWhrlwYMrh&alt=json
+
+
+{"filter":{"marketBettingTypes":["ASIAN_HANDICAP_SINGLE_LINE","ASIAN_HANDICAP_DOUBLE_LINE","ODDS","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE","LINE"],"eventTypeIds":[1],"productTypes":["EXCHANGE"],"selectBy":"RANK","contentGroup":{"language":"en","regionCode":"ASIA"},"maxResults":0,"inPlayOnly":true,"eventIds":[29795760]},"facets":[{"type":"EVENT","maxValues":0,"skipValues":0,"applyNextTo":0}],"currencyCode":"USD","locale":"en"}
+
+
+
+
+{"facets":[{"values":[{"key":{"eventId":29795760},"cardinality":45}],"totalResults":1,"type":"EVENT"}],"results":[],"attachments":{"events":{"29795760":{"eventId":29795760,"key":"EVENT:29795760","name":"FC Koln v Fortuna Dusseldorf","eventTypeId":1,"countryCode":"DE","timezone":"GMT","openDate":"2020-05-24T16:01:05.000Z","videoAvailable":false}}}}
