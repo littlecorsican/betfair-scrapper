@@ -1,0 +1,71 @@
+<html>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+    integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+    crossorigin="anonymous"></script>
+
+
+<button id="get_market_id">Get Market Id</button>
+<button id="get_match_list">Get Match List</button>
+<button id="export_csv">Export to CSV File</button>
+
+<p>
+<textarea id="txtarea" cols = "150" rows='30'></textarea>
+
+
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+$('#get_market_id').click(function() {
+
+    $.ajax({
+            headers: { 
+                'Content-Type' : 'application/json' ,
+                },
+            async: false,
+            url: "https://www.betfair.com/www/sports/navigation/facet/v1/search?_ak=nzIFcwyWhrlwYMrh&alt=json",   
+            data : {"filter":{"marketBettingTypes":["ASIAN_HANDICAP_SINGLE_LINE","ASIAN_HANDICAP_DOUBLE_LINE","ODDS"],"productTypes":["EXCHANGE"],"marketTypeCodes":["MATCH_ODDS"],"selectBy":"RANK","contentGroup":{"language":"en","regionCode":"UK"},"turnInPlayEnabled":true,"maxResults":0,"eventTypeIds":[1]},"facets":[{"type":"EVENT_TYPE","skipValues":0,"maxValues":10,"next":{"type":"COMPETITION","skipValues":0,"maxValues":5,"next":{"type":"EVENT","skipValues":0,"maxValues":10,"next":{"type":"MARKET","maxValues":1}}}}],"currencyCode":"GBP","locale":"en_GB"},
+            type: 'POST',
+            success:function(data) {
+                 console.log(data)
+
+            },
+            beforeSend : function(){
+
+                console.log("sending")
+
+            }
+            })
+
+
+});
+
+function getNow() {
+    let now = new Date();
+    return now;
+}
+
+function Logger(content) {
+    $('#txtarea').val($('#txtarea').val() + "\n" + getNow() + ":" +content) ; 
+}
+
+</script>
+
+</html>
