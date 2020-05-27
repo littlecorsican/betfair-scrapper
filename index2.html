@@ -28,8 +28,20 @@
 <button id="clear">Clear</button>
 
 <p>
-    <!--<textarea id="txtarea" cols = "200" rows='30'></textarea>-->
+	<span>Status : </span><span id="ajaxstatus"></span>
+</p>
+
+<p>
+    <textarea id="hiddentxt" style="display:none"></textarea>
     <div id="txtarea" style="width:100%;height:100%;"></div>
+	<table border="1">
+		<thead>
+		
+		</thead>
+		<tbody>
+		
+		</tbody>
+	</table>
 </p>
 
 
@@ -73,18 +85,19 @@ function getNow() {
 }
 
 function Logger(content) {
-    $('#txtarea').html($('#txtarea').html() + "\n" + getNow() + " , " +content) ; 
+    $('#txtarea').html($('#txtarea').html() + ";<br>" + getNow() + " , " + content) ; 
 }
 
 $('#export_csv').click(function() {
 
-    if ($('#txtarea').val() == "" ) {
+    if ($('#txtarea').html() == "" ) {
         alert("empty text area");
     } else {
-        let content = $('#txtarea').html();
+        let content = $('#txtarea').text();
+		content = content.replace(/;/g, "\n");
 
         var hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(content);
+        hiddenElement.href = 'data:html/csv;charset=utf-8,' + encodeURI(content);
         hiddenElement.target = '_blank';
         hiddenElement.download = 'download.csv';
         hiddenElement.click();
@@ -150,6 +163,7 @@ function sendReq(marketId) {
                 */
                 //$("#txtarea").val( $("#txtarea").val() + content + "\n" );
                 Logger(content);
+				$("#ajaxstatus").html("req success....!")
 
                 //recurr
                 let inputId = $("#marketId").val();
@@ -162,10 +176,12 @@ function sendReq(marketId) {
             beforeSend : function(){
 
                 console.log("sending")
+				$("#ajaxstatus").html("sending....")
 
             },
             fail: function(xhr, textStatus, errorThrown){
                 Logger("request failed, timer terminated");
+				$("#ajaxstatus").html("request failed, timer terminated")
             }
             })
             
