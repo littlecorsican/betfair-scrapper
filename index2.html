@@ -1,0 +1,190 @@
+<html>
+    <head>
+        <title> Betfair Price scrapper </title>
+        <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+        crossorigin="anonymous"></script>
+    </head>
+    <body>
+    <h3>Betfair Price scrapper</h3>
+    <p>
+        1) This app uses proxy server from heroku's cors anywhere in order to bypass CORS cross origin restriction policy. If heroku server
+        <br> is down it will not work.<br>
+        2) If the odds is undefined, it means that selection has no matched price yet <br>
+
+        3) Check out the tutorial if you dont know how to use. &nbsp <a href="betfairtutorial.html">Tutorial on how to use this app</a> <br>
+        4) The http request sent to the server will take a few seconds since betfair's server is quite slow. So you will not accurately <br>
+            get the response strictly on every interval. The actual interval is your interval + betfair server respond time. So if you <br>
+            set the interval to be 10 seconds and betfair response time is 3 seconds, the actual interval is 13 seconds instead of 10. <br>
+
+    </p>
+
+<p>Market Id :<input type="text" id="marketId" size='100'/></p>
+<p>Interval (seconds) : <input type="text" id="interval" size = 2 value="10000" />
+<br>Minimum 5 seconds please . 1000 = 1 sec, 5000 = 5 sec *</p>
+
+<button id="start_timer">Start timer</button><button id="stop_timer">Stop timer</button>
+<button id="export_csv">Export to CSV File</button>
+<button id="clear">Clear</button>
+
+<p>
+    <!--<textarea id="txtarea" cols = "200" rows='30'></textarea>-->
+    <div id="txtarea" style="width:100%;height:100%;"></div>
+</p>
+
+
+
+<script>
+
+
+$('#clear').click(function() {
+    $('#txtarea').html("");
+});
+
+
+$('#start_timer').click(function() {
+
+    let inputId = $("#marketId").val();
+    let interval = $("#interval").val();
+    if (interval < 5000) {
+        alert("Interval too low, please set it higher");
+
+    } else {
+        console.log(interval)
+
+        Logger("timer started");
+        Logger("In Play, Status, Number of Runner, Runner Name, Last matched, Available to back, Available to Lay");
+
+        theTimer = setTimeout(function() {sendReq(inputId)}, parseInt(interval));
+    }
+
+});  // end of start timer
+
+$('#stop_timer').click(function() {
+    clearTimeout(theTimer);
+    console.log("timer stopped")
+    Logger("timer stopped");
+});  // end of stop timer
+
+
+function getNow() {
+    let now = new Date();
+    return now;
+}
+
+function Logger(content) {
+    $('#txtarea').html($('#txtarea').html() + "\n" + getNow() + " , " +content) ; 
+}
+
+$('#export_csv').click(function() {
+
+    if ($('#txtarea').val() == "" ) {
+        alert("empty text area");
+    } else {
+        let content = $('#txtarea').html();
+
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(content);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'download.csv';
+        hiddenElement.click();
+    }
+
+});  // end of export_csv
+
+function sendReq(marketId) {
+
+    corsurl = "https://cors-anywhere.herokuapp.com/";
+    //targeturl = "https://www.betfair.com/www/sports/navigation/facet/v1/search?_ak=nzIFcwyWhrlwYMrh&alt=json";
+    //url = "https://cors-anywhere.herokuapp.com/https://ero.betfair.com/www/sports/exchange/readonly/v1/bymarket?_ak=nzIFcwyWhrlwYMrh&alt=json&marketIds=1.170411944,1.170443743,1.170420149,1.170420383,1.170420965,1.170420732,1.170420266,1.170420500,1.170420616,1.170471274,1.170471381,1.170471488,1.170471595,1.170471702,1.170471809,1.170471916,1.170472023,1.170472130,1.170519488,1.170467060,1.170466787,1.170466969,1.170466878,1.170466696,1.170479989,1.170493642,1.170493733,1.170493824,1.170493915,1.170494006,1.170494097,1.170441599,1.170441706,1.170441813,1.170441920,1.170442027,1.170442134,1.170442241,1.170442348&types=MARKET_STATE"
+    targeturl = "https://ero.betfair.com/www/sports/exchange/readonly/v1/bymarket?_ak=nzIFcwyWhrlwYMrh&currencyCode=USD&locale=en&marketIds=" + marketId + "&rollupLimit=25&rollupModel=STAKE&types=MARKET_STATE,RUNNER_STATE,RUNNER_EXCHANGE_PRICES_BEST,RUNNER_DESCRIPTION";
+    //targeturl = "https://ero.betfair.com/www/sports/exchange/readonly/v1/bymarket?_ak=nzIFcwyWhrlwYMrh&currencyCode=USD&locale=en&marketIds=1.170443743&rollupLimit=25&rollupModel=STAKE&types=MARKET_STATE,RUNNER_STATE,RUNNER_EXCHANGE_PRICES_BEST,RUNNER_DESCRIPTION";
+
+    
+    $.ajax({
+            headers: { 
+                'Content-Type' : 'application/json' ,
+                //'Origin' : 'NULL' ,
+                //'x-requested-with' : 'NULL' ,
+                },
+            async: false,
+            url: corsurl + targeturl,   
+            //data : {"filter":{"marketBettingTypes":["ASIAN_HANDICAP_SINGLE_LINE","ASIAN_HANDICAP_DOUBLE_LINE","ODDS"],"productTypes":["EXCHANGE"],"marketTypeCodes":["MATCH_ODDS"],"selectBy":"RANK","contentGroup":{"language":"en","regionCode":"UK"},"turnInPlayEnabled":true,"maxResults":0,"eventTypeIds":[1]},"facets":[{"type":"EVENT_TYPE","skipValues":0,"maxValues":10,"next":{"type":"COMPETITION","skipValues":0,"maxValues":5,"next":{"type":"EVENT","skipValues":0,"maxValues":10,"next":{"type":"MARKET","maxValues":1}}}}],"currencyCode":"GBP","locale":"en_GB"},
+            type: 'GET',
+            success:function(data) {
+                console.log(data)
+
+                let content = "";
+                let marketnodes = data.eventTypes[0].eventNodes[0].marketNodes;
+                
+
+
+
+                for (let o = 0 ; o < marketnodes.length ; o++) {
+
+                    let inplay = marketnodes[o].state.inplay;
+                    let status = marketnodes[o].state.status;
+                    let numberOfRunners = marketnodes[o].state.numberOfRunners;
+
+                    content += inplay + "," + status + "," + numberOfRunners + ",";
+
+                    for (let i = 0 ; i < numberOfRunners; i ++) {
+                        
+                        //SelectionName.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i].description.runnerName)
+                        //SelectionLastPriceTraded.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i].state.lastPriceTraded)
+                        content += marketnodes[o].runners[i].description.runnerName + "," + marketnodes[o].runners[i].state.lastPriceTraded + "," +
+                        marketnodes[o].runners[i].exchange.availableToBack[0].price + "," + marketnodes[o].runners[i].exchange.availableToLay[0].price + "," ;
+                         
+                        //SelectionBackOdds.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i])
+                        //SelectionBackMatched.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i])
+                        //SelectionLayOdds.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i])
+                        //SelectionLayMatched.push(data.eventTypes[0].eventNodes[0].marketNodes[0].runners[i])
+                    }
+                }
+
+                /*
+                $("#nRunners").html(numberOfRunners);
+                $("#inplayspan").html(inplay.toString());
+                $("#matchtimespan").html(matchtime);
+                $("#statusspan").html(status);
+                */
+                //$("#txtarea").val( $("#txtarea").val() + content + "\n" );
+                Logger(content);
+
+                //recurr
+                let inputId = $("#marketId").val();
+                let interval = $("#interval").val();
+
+                theTimer = setTimeout(function() {sendReq(inputId)}, parseInt(interval))
+
+
+            },
+            beforeSend : function(){
+
+                console.log("sending")
+
+            },
+            fail: function(xhr, textStatus, errorThrown){
+                Logger("request failed, timer terminated");
+            }
+            })
+            
+
+/*
+    fetch(targeturl)
+    .then((resp) => resp.json()) // Transform the data into json
+        console.log(resp)
+    .then(function(data) {
+        // Create and append the li's to the ul
+        })
+             
+*/
+
+
+} // end of sendReq
+
+</script>
+</body>
+
+
+</html>
