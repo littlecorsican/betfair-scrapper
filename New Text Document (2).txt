@@ -1,6 +1,0 @@
-https://www.betfair.com/www/sports/navigation/facet/v1/search?_ak=nzIFcwyWhrlwYMrh&alt=json
-
-{"filter":{"marketBettingTypes":["ASIAN_HANDICAP_SINGLE_LINE","ASIAN_HANDICAP_DOUBLE_LINE","ODDS","LINE"],"maxResults":1,"productTypes":["EXCHANGE"],"contentGroup":{"language":"en","regionCode":"ASIA"},"eventIds":[29795760],"selectBy":"RANK"},"currencyCode":"USD","locale":"en"}
-
-
-{"facets":[],"results":[{"eventId":29795760,"marketId":"1.170411944","competitionId":59,"eventTypeId":1}],"attachments":{}}
